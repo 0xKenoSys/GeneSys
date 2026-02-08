@@ -8,7 +8,7 @@ int main() {
     for (int i = 0; i<50; i++) {
         a = rand() % 7; //产生0-6的随机数
         b = rand() % 7; //产生0-6的随机数
-        //TODO：在这里插入条件断点： a == b
+        //TDO：在这里插入条件断点： a == b
     }
     return 0;
 }

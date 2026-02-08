@@ -1,7 +1,7 @@
 #include <stdio.h>
 int main() {
     for ( int i=1; i <= 1000 ; i++ ) {
-        //TODO:插入计次断点
+        //TOD插入计次断点
         printf("我真行！\n");
     }
 }

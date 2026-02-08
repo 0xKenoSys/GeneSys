@@ -3,7 +3,7 @@ int main() {
     double pi = 3.141592653589;
     printf("pi 的内存地址为 %x \n", &pi);
     //输出内存地址
-    //TODO：在这里插入断点
+    //TOD
     return 0;
 }
 
