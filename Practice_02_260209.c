@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void success() {
+void success() {    //void：没有返回值
     puts("Succeed!");
 }
 
