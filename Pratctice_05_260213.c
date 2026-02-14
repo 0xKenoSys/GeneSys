@@ -1,19 +1,29 @@
 #include <stdio.h>
 int main() {
     int m, n;
+    int isPrime = 1;    //关键：定义一个标志位，假设它是素数（为真）
+
     printf("Enter a number:");
     scanf("%d", &m);
 
-    for (n = 2; n < m; n++) {
-        if (m % n == 0) {
-            printf("The number is not a prime.");
-            goto end;
-            }else {
-                printf("The number is a prime.");
-                break;
-        }
+    //特殊情况处理
+    if (m <= 1) {
+        isPrime = 0;
     }
-    end:
+
+    for (n = 2; n < m; n++) {
+        if (m % n == 0) {   //一旦发现能被整除，说明肯定不是素数
+            isPrime = 0;    //也可以统计因数个数a++
+            break;  //既然不是素数，后面没必要再试，直接跳出
+        }   //后面绝对不要写else{ break; }
+    }
+        //循环结束后，根据标志位说话
+        if (isPrime == 1) {
+            printf("The number is a prime.\n");
+        }else {
+            printf("The number is not a prime.\n");
+        }
+
     return 0;
 }
 
