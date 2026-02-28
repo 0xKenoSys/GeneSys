@@ -1,0 +1,17 @@
+.DS_Store
+*.dSYM
+*.md
+.idea/
+cmake-build-debug/
+
+
+cmake-build-*/
+build/
+out/
+
+
+*.o
+*.ot
+*.a
+*.dylib
+*.app
