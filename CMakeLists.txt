@@ -5,6 +5,7 @@ project(CppProjects)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#让指令搜索文件夹KenoSys_Projects之下的文件
 file(GLOB source_files CONFIGURE_DEPENDS "KenoSys_Projects/*.cpp")
 
 foreach(current_file ${source_files})
