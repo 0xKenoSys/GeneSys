@@ -1,14 +1,16 @@
 cmake_minimum_required(VERSION 3.20)
 project(CppProjects)
-set(CMAKE_CXX_STANDARD 14)
 
-# 赋予自动化脚本实时感知的特性
-file(GLOB_RECURSE source_files CONFIGURE_DEPENDS "*.cpp")
+# 保持全局设定的同时，克制搜索范围
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# 依次为每个独立文件搭建专属的运行环境
+file(GLOB source_files CONFIGURE_DEPENDS "KenoSys_Projects/*.cpp")
+
 foreach(current_file ${source_files})
-    # 精准提取出不包含后缀的文件名
     get_filename_component(target_name ${current_file} NAME_WE)
-    # 将提取出的名字作为独立可执行程序的标识
     add_executable(${target_name} ${current_file})
+
+    # 极其关键的杀招：对每一个独立目标进行绝对的标准绑定
+    target_compile_features(${target_name} PRIVATE cxx_std_17)
 endforeach()
