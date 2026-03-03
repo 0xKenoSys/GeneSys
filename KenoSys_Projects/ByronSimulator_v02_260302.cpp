@@ -2,7 +2,7 @@
 
 int main() {
     std::cout << "========================================================================" << std::endl;
-    std::cout << "                       Byron Stimulator Ver.01                          " << std::endl;
+    std::cout << "                       Byron Simulator Ver.01                          " << std::endl;
 
     std::cout << "\n\"With pleasure drugged, he almost longed for woe,\nAnd even for change of scene would seek the shades below.\"\n" << std::endl;
 
