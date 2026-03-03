@@ -21,6 +21,12 @@ private:
         return upper_str;
     }
 
+    std::string to_lower(const std::string& str) {
+        std::string lower_str = str;
+        for (char & c : lower_str) c = tolower(c);
+        return lower_str;
+    }
+
 public:
     bool init_guillotine(const std::string& filepath) {
         std::ifstream file(filepath);
@@ -64,7 +70,7 @@ public:
             }
         }
         std::cout << "---------------------------" << std::endl;
-        std::string target = to_upper(word);
+        std::string target = to_lower(word);
         auto it = dict.find(target);
         if (it != dict.end()) {
             const auto& data = it->second;
