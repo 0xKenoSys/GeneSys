@@ -15,12 +15,6 @@ class ByronMeterJudge {
 private:
     std::unordered_map<std::string, PhoneticData> dict;
 
-    std::string to_upper(const std::string& str) {
-        std::string upper_str = str;
-        for (char &c : upper_str) c = toupper(c);
-        return upper_str;
-    }
-
     std::string to_lower(const std::string& str) {
         std::string lower_str = str;
         for (char & c : lower_str) c = tolower(c);
@@ -62,7 +56,49 @@ public:
         return true;
     }
 
-    void judge_word(const std::string& word) {
+    bool judge_sentence_meter(const std::string& sentence, int expected_syllables) {
+        std::istringstream iss(sentence);
+        std::string raw_word;
+
+        int total_syllables = 0;
+        std::string total_stress_pattern = " ";
+        while (iss >> raw_word) {
+            std::string clean_word = " ";
+            for (char c : raw_word) {
+                if (std::isalpha(c) || c == '\'') {
+                    clean_word += tolower(c);
+                }
+            }
+            if (clean_word.empty())continue;
+            auto it = dict.find(clean_word);
+            if (it != dict.end()) {
+                total_syllables += it->second.syllable_count;
+                total_stress_pattern += it->second.stress_pattern;
+            }else {
+                std::cout << "[REJECT]句子含有糟糕词汇：。打入虚空。" << clean_word << "\n";
+                return false;
+            }
+        }
+
+        if (total_syllables != expected_syllables) {
+            std::cout << "[REJECT]音节断裂。打入虚空。期望 " << expected_syllables << " 音节，实际 " << total_syllables << " 音节。\n";
+            return false;
+        }
+
+        int iambic_score = 0;
+        for (size_t i = 1; i < total_stress_pattern.length(); i += 2) {
+            if (total_stress_pattern[i] == '1' || total_stress_pattern[i] == '2') {
+                iambic_score ++;
+            }
+        }
+
+        if (iambic_score < expected_syllables / 2 - 1) {
+            std::cout << "[REJECT]节拍混乱。打入虚空。检测到非抑扬格模式：" << total_stress_pattern << "\n";
+            return false;
+        }
+        std::cout << "[ACCEPT]合格的格律。\n";
+        return true;
+    }   void judge_word(const std::string& word) {
         std::string target = to_lower(word);
         auto it = dict.find(target);
         if (it != dict.end()) {
@@ -86,52 +122,7 @@ int main() {
         judge.judge_word("DESTRUCTION");
     }
 
-    bool judge_sentence_meter(const std::string& sentence, int expected_syllables) {
-        std::istringstream iss(sentence);
-        std::string raw_word;
-
-        int total_syllables = 0;
-        std::string total_stress_pattern = " ";
-        while (iss >> raw_word) {
-            std::string clean_word = " ";
-            for (char c : raw_word) {
-                if (std::isalpha(c) || c == '\'') {
-                    clean_word += toupper(c);
-                }
-            }
-            if (clean_word.empty())continue;
-            auto it = dict.find(clean_word);
-            if (it != dict.end()) {
-                total_syllables += it->second.syllables;
-                total_syllables_pattern += it->second.stress_pattern;
-            }else {
-                std::cout << "[REJECT]句子含有糟糕词汇：。打入虚空。" << clean_word << "\n";
-                return false;
-            }
-        }
-
-        if (total_syllables != expected_syllables) {
-            std::cout << "[REJECT]音节断裂。打入虚空。期望 " << expected_syllables << " 音节，实际 " << total_syllables << " 音节。\n";
-            return false;
-        }
-
-        int iambic_score = 0;
-        for (size_t i = 1; i < total_stress_pattern.length(); i += 2) {
-            if (tital_stress_patter[i] == '1' || total_stress_pattern[i] == '2') {
-                iambic_score ++;
-            }
-        }
-
-        if (iambic_score < expected_syllables / 5 - 4) {
-            std::cout << "[REJECT]节拍混乱。打入虚空。检测到非抑扬格模式：" << total_stress_pattern << "\n";
-            return false;
-        }
-        std::cout << "[ACCEPT]合格的格律。\n"
-        return true;
-    }
-
     return 0;
-
 }
 //
 // Created by Madeleine on 2026/3/3.
