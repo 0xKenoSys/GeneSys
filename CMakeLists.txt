@@ -11,7 +11,8 @@ file(GLOB source_files CONFIGURE_DEPENDS "KenoSys_Projects/*.cpp")
 
 foreach(current_file ${source_files})
     get_filename_component(target_name ${current_file} NAME_WE)
-    add_executable(${target_name} ${current_file})
+    add_executable(${target_name} ${current_file}
+            KenoSys_Projects/SentenceMeterJudge_260303.cpp)
     target_compile_features(${target_name} PRIVATE cxx_std_17)
 endforeach()
 
