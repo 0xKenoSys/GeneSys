@@ -1,7 +1,7 @@
 .DS_Store
 *.dSYM
 *.md
-.idea/
+../.idea/
 cmake-build-debug/
 
 
