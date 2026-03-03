@@ -3,11 +3,12 @@
 #include <string>
 #include <unordered_map>
 #include <sstream>
+#include <cctype>
 
 struct PhoneticData {
-    int syllable count;
+    int syllable_count;
     std::string last_phoneme;
-    std::string stress pattern;
+    std::string stress_pattern;
 };
 
 class ByronMeterJudge {
@@ -15,7 +16,7 @@ private:
     std::unordered_map<std::string, PhoneticData> dict;
 
 public:
-    void load_dict(const std::strings&filepath) {
+    void load_dict(const std::string&filepath) {
         std::ifstream file(filepath);
         std::string line;
 
