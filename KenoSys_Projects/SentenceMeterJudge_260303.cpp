@@ -38,9 +38,9 @@ public:
             iss >> word;
 
             int syllables = 0;
-            std::string stress = " ";
+            std::string stress = "";
             std::string phoneme;
-            std::string last_p = " ";
+            std::string last_p = "";
 
             while (iss >> phoneme) {
                 last_p = phoneme;
@@ -61,9 +61,9 @@ public:
         std::string raw_word;
 
         int total_syllables = 0;
-        std::string total_stress_pattern = " ";
+        std::string total_stress_pattern = "";
         while (iss >> raw_word) {
-            std::string clean_word = " ";
+            std::string clean_word = "";
             for (char c : raw_word) {
                 if (std::isalpha(c) || c == '\'') {
                     clean_word += tolower(c);
@@ -75,7 +75,7 @@ public:
                 total_syllables += it->second.syllable_count;
                 total_stress_pattern += it->second.stress_pattern;
             }else {
-                std::cout << "[REJECT]句子含有糟糕词汇：。打入虚空。" << clean_word << "\n";
+                std::cout << "[REJECT]句子含有糟糕词汇：" << clean_word << "。打入虚空。" << "\n";
                 return false;
             }
         }
@@ -91,8 +91,7 @@ public:
                 iambic_score ++;
             }
         }
-
-        if (iambic_score < expected_syllables / 2 - 1) {
+      if (iambic_score < expected_syllables / 2 - 1) {
             std::cout << "[REJECT]节拍混乱。打入虚空。检测到非抑扬格模式：" << total_stress_pattern << "\n";
             return false;
         }
@@ -120,6 +119,14 @@ int main() {
         std::cout << "\n测试词汇：";
         judge.judge_word("HURRICANE");
         judge.judge_word("DESTRUCTION");
+
+    std::cout << "\n测试句子：\n";
+        std::string test_sentence1 = "With pleasure drugged, he almost longed for woe,\n";
+        int expected_syllables1 = 10;
+        judge.judge_sentence_meter(test_sentence1, expected_syllables1);
+        std::string test_sentence2 = "And even for change of scene would seek the shades below.\n";
+        int expected_syllables2 = 12;
+        judge.judge_sentence_meter(test_sentence2, expected_syllables2);
     }
 
     return 0;
