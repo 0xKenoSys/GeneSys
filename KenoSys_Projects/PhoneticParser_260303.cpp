@@ -63,18 +63,11 @@ public:
     }
 
     void judge_word(const std::string& word) {
-        std::cout << "\n字典内部键值诊断：" << std::endl;
-        for (const auto& pair : dict) {
-            if (pair.first.find("HURRICANE")!=std::string::npos) {
-                std::cout << "找到包含该词的Key:[" << pair.first << "[, Length: " << pair.first.length() << std::endl;
-            }
-        }
-        std::cout << "---------------------------" << std::endl;
         std::string target = to_lower(word);
         auto it = dict.find(target);
         if (it != dict.end()) {
             const auto& data = it->second;
-            std::cout << ">> 词汇：" << target << "\t| 音节数：" << data.syllable_count << "\t| 尾音：" << data.last_phoneme << "\t| 节拍：" << data.stress_pattern << "\n";
+            std::cout << "\n>> 词汇：" << target << "\t| 音节数：" << data.syllable_count << "\t| 尾音：" << data.last_phoneme << "\t| 节拍：" << data.stress_pattern << "\n";
         }else {
             std::cout << "\n[WARNING]未知词汇：" << word << "。这不属于词汇库。打入虚无。" << std::endl;
         }
