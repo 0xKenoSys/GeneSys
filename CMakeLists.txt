@@ -11,10 +11,7 @@ file(GLOB source_files CONFIGURE_DEPENDS "KenoSys_Projects/*.cpp")
 
 foreach(current_file ${source_files})
     get_filename_component(target_name ${current_file} NAME_WE)
-    add_executable(${target_name} ${current_file}
-            KenoSys_Projects/ByronSimulator_v01_Practice_01_260302.cpp
-            KenoSys_Projects/ByronSimulator_v02_260302.cpp
-            KenoSys_Projects/PhoneticParser_260303.cpp)
-
+    add_executable(${target_name} ${current_file})
     target_compile_features(${target_name} PRIVATE cxx_std_17)
 endforeach()
+
