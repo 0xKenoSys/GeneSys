@@ -57,8 +57,14 @@ public:
     }
 
     void judge_word(const std::string& word) {
+        std::cout << "\n字典内部键值诊断：" << std::endl;
+        for (const auto& pair : dict) {
+            if (pair.first.find("HURRICANE")!=std::string::npos) {
+                std::cout << "找到包含该词的Key:[" << pair.first << "[, Length: " << pair.first.length() << std::endl;
+            }
+        }
+        std::cout << "---------------------------" << std::endl;
         std::string target = to_upper(word);
-        std::cout << "\nDEBUG -> Target: [" << target << "], Length: " << target.length() << std::endl;
         auto it = dict.find(target);
         if (it != dict.end()) {
             const auto& data = it->second;
