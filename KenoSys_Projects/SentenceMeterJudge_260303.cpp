@@ -95,7 +95,7 @@ public:
             std::cout << "[REJECT]节拍混乱。打入虚空。检测到非抑扬格模式：" << total_stress_pattern << "\n";
             return false;
         }
-        std::cout << "[ACCEPT]合格的格律。\n";
+        std::cout << "[ACCEPT]合格的格律。虚空狂喜。\n";
         return true;
     }   void judge_word(const std::string& word) {
         std::string target = to_lower(word);
@@ -124,7 +124,7 @@ int main() {
         std::string test_sentence1 = "With pleasure drugged, he almost longed for woe,\n";
         int expected_syllables1 = 10;
         judge.judge_sentence_meter(test_sentence1, expected_syllables1);
-        std::string test_sentence2 = "And even for change of scene would seek the shades below.\n";
+        std::string test_sentence2 = "And even for change of scene would seek the shades below.\n"; //这句话有13个音节，那么以后要考虑音节放宽。比如/n/音是否可以宽限，尤其是诗歌里常见的可缩写的词
         int expected_syllables2 = 12;
         judge.judge_sentence_meter(test_sentence2, expected_syllables2);
     }
