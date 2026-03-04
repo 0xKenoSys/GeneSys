@@ -27,6 +27,40 @@ private:
         "their", "this","that", "these", "those", "than", "as"
     };
 
+    const std::unordered_map<std::string, std::string> custom_stress = {
+        //1.带次重音的副词/连词
+        {"almost", "10"},
+        {"always", "10"},
+        {"also", "10"},
+        {"therefore", "10"},
+        {"wherefore", "10"},
+        {"sometimes", "10"},
+        {"somewhat", "10"},
+        //2.高频复合词
+        {"moonlight", "10"},
+        {"midnight", "10"},
+        {"sunshine", "10"},
+        {"sunset", "10"},
+        {"sunrise", "10"},
+        {"heartbreak", "10"},
+        {"earthquake", "10"},
+        //3.多音节介词
+        {"upon", "01"},
+        {"without", "01"},
+        {"within", "01"},
+        {"before", "01"},
+        {"behind", "01"},
+        {"beyond", "01"},
+        {"into", "10"},
+        //4.叹词、古英语、宗教词汇
+        {"alas", "01"},
+        {"amen", "01"},
+        {"farewell", "01"},
+        {"myself", "01"},
+        {"himself", "01"},
+        {"herself", "01"}
+    };
+
     std::string to_lower(const std::string& str) {
         std::string lower_str = str;
         for (char & c : lower_str) c = tolower(c);
@@ -97,6 +131,8 @@ public:
                 PhoneticData current_data = it->second;
                 if (weak_words.find(clean_word) != weak_words.end()) {
                     current_data.stress_pattern = std::string(current_data.syllable_count, '0');
+                }else if (custom_stress.find(clean_word)!=custom_stress.end()) {
+                    current_data.stress_pattern = custom_stress.at(clean_word);
                 }
 
                 total_syllables += current_data.syllable_count;
