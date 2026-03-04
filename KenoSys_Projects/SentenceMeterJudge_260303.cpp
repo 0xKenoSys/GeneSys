@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <sstream>
 #include <cctype>
+#include <vector>   //用于暂存句子中的单词数据
+#include <unordered_set>    //存储功能词集合
 
 struct PhoneticData {
     int syllable_count;
@@ -14,6 +16,16 @@ struct PhoneticData {
 class ByronMeterJudge {
 private:
     std::unordered_map<std::string, PhoneticData> dict;
+    std::unordered_map<std::string, PhoneticData> elision_dict; //省音词典
+
+    //弱读功能词
+    const std::unordered_set<std::string>weak_words = {
+        "a", "an", "the", "for", "yet", "so", "at", "by", "from", "in", "into", "of", "on", "to", "with",
+        "upon", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "do", "does",
+        "did","shall", "will", "should", "would", "may", "might", "must", "can", "could", "i", "you", "he",
+        "she", "it","we", "they", "me", "him", "her", "us", "them", "my", "your", "his", "its", "our",
+        "their", "this","that", "these", "those", "than", "as"
+    };
 
     std::string to_lower(const std::string& str) {
         std::string lower_str = str;
@@ -22,6 +34,13 @@ private:
     }
 
 public:
+    //构造函数：省音规则
+    ByronMeterJudge() {
+        elision_dict["even"] = {1, "n", "1"};;
+        elision_dict["over"] = {1,"r", "1"};
+        elision_dict["never"] = {1,"r", "1"};
+        elision_dict["heaven"] = {1,"r","1"};
+    }
     bool init_guillotine(const std::string& filepath) {
         std::ifstream file(filepath);
         if (!file.is_open()) {
@@ -49,7 +68,7 @@ public:
                     stress += phoneme.back();
                 }
             }
-        dict[word] =  {syllables, last_p, stress};
+        dict[to_lower(word)] =  {syllables, last_p, stress};
         }
         file.close();
         std::cout << "[SYSTEM] 词典加载完毕。共收录" << dict.size() << "个词汇。" << std::endl;
@@ -59,6 +78,9 @@ public:
     bool judge_sentence_meter(const std::string& sentence, int expected_syllables) {
         std::istringstream iss(sentence);
         std::string raw_word;
+
+        std::vector<std::string>word_buffer;
+        std::vector<PhoneticData>phonetic_buffer;
 
         int total_syllables = 0;
         std::string total_stress_pattern = "";
@@ -72,11 +94,40 @@ public:
             if (clean_word.empty())continue;
             auto it = dict.find(clean_word);
             if (it != dict.end()) {
-                total_syllables += it->second.syllable_count;
-                total_stress_pattern += it->second.stress_pattern;
+                PhoneticData current_data = it->second;
+                if (weak_words.find(clean_word) != weak_words.end()) {
+                    current_data.stress_pattern = std::string(current_data.syllable_count, '0');
+                }
+
+                total_syllables += current_data.syllable_count;
+                total_stress_pattern += current_data.stress_pattern;
+
+                word_buffer.push_back(clean_word);
+
+                phonetic_buffer.push_back(current_data);
             }else {
                 std::cout << "[REJECT]句子含有糟糕词汇：" << clean_word << "。打入虚空。" << "\n";
                 return false;
+            }
+        }
+
+        if (total_syllables > expected_syllables) {
+            std::cout << "[WARNING]音步溢出（当前 " << total_syllables << " 音节 > 期望 " << expected_syllables << " 音节）。启动省音补丁...\n";
+
+            for (size_t i = 0; i < word_buffer.size(); ++i) {
+                if (total_syllables == expected_syllables)break;
+
+                auto elision_it = elision_dict.find(word_buffer[i]);
+                if (elision_it != elision_dict.end()) {
+                    int diff = phonetic_buffer[i].syllable_count - elision_it -> second.syllable_count;
+                    if (diff > 0) {
+                        std::cout << "->触发省音：将 '" << word_buffer[i] << "' 压缩为 " << elision_it -> second.syllable_count << " 音节。\n";
+
+                        total_syllables -= diff;
+
+                        phonetic_buffer[i] = elision_it->second;
+                    }
+                }
             }
         }
 
@@ -85,19 +136,26 @@ public:
             return false;
         }
 
+        std::string final_stress_pattern = "";
+        for (const auto& data : phonetic_buffer) {
+            final_stress_pattern += data.stress_pattern;
+        }
+
         int iambic_score = 0;
         for (size_t i = 1; i < total_stress_pattern.length(); i += 2) {
-            if (total_stress_pattern[i] == '1' || total_stress_pattern[i] == '2') {
+            if (final_stress_pattern[i] == '1' || final_stress_pattern[i] == '2') {
                 iambic_score ++;
             }
         }
       if (iambic_score < expected_syllables / 2 - 1) {
-            std::cout << "[REJECT]节拍混乱。打入虚空。检测到非抑扬格模式：" << total_stress_pattern << "\n";
+            std::cout << "[REJECT]节拍混乱。打入虚空。检测到非抑扬格模式：" << final_stress_pattern << "\n";
             return false;
         }
-        std::cout << "[ACCEPT]合格的格律。虚空狂喜。\n";
+        std::cout << "[ACCEPT]合格的格律。最终重音流：" << final_stress_pattern << "\n";
         return true;
-    }   void judge_word(const std::string& word) {
+    }
+
+    void judge_word(const std::string& word) {
         std::string target = to_lower(word);
         auto it = dict.find(target);
         if (it != dict.end()) {
