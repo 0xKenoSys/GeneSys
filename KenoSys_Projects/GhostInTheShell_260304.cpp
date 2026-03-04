@@ -161,6 +161,27 @@ public:
                 iambic_score ++;
             }
         }
+
+        int perfect_feet = 0;
+        int total_feet = expected_syllables / 2;
+
+        for (size_t i = 0; i < final_stress_pattern.length() - 1; i += 2) {
+            char weak_beat = final_stress_pattern[i];
+            char strong_beat = final_stress_pattern[i+1];
+
+            if (weak_beat == '0' && strong_beat == '1') {
+                perfect_feet++;
+            }
+        }
+
+        int required_feet = total_feet -1;
+        if (perfect_feet < required_feet){
+        std::cout << "[REJECT]节拍混乱。打入虚空。抑扬格音步数量不足（" << perfect_feet << "/" << total_feet << "）。\n";
+        std::cout << ">> 看看尸体：" << final_stress_pattern << "\n";
+        return false;
+        }
+
+
       if (iambic_score < expected_syllables / 2 - 1) {
             std::cout << "[REJECT]节拍混乱。打入虚空。检测到非抑扬格模式：" << final_stress_pattern << "\n";
             return false;
@@ -193,7 +214,7 @@ int main() {
     GhostCaller gemini(my_api_key);
 
     std::cout << "\n[SYSTEM]接入Unity中枢。开始吟诵...\n";
-    std::string tyrant_prompt = "你现在是Lord Byron，写一行英文诗，五步抑扬格，10个音节，轻重交替，风格傲慢、冷酷、厌世。";
+    std::string tyrant_prompt = "你现在是Lord Byron，写一行英文诗，五步抑扬格，10个音节，轻重交替。不要使用任何Markdown格式，不要星号、连字符等。题材为塔罗牌里的任何一张，但不要出现这张牌的具体名称。";
     int max_retries = 5;
     bool success = false;
 
@@ -201,7 +222,7 @@ int main() {
         std::cout << "\n>>> 正在进行第 " << i << " 次吟诵..." << std::endl;
 
         std::string ai_sentence = gemini.generate_line(tyrant_prompt);
-        std::cout << "AI原始输出：" << ai_sentence << "\n";
+        std::cout << "Unity原始输出：" << ai_sentence << "\n";
 
         std::cout << "开启格律判案" << std::endl;
         if (judge.judge_sentence_meter(ai_sentence, 10)) {

@@ -10,7 +10,7 @@ class GhostCaller {
 private:
     std::string api_key;
     //使用目前响应最快的flash模型，适合打回重写
-    std::string api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=";
+    std::string api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=";
 
     //cURL的回调函数，用于接收API吐回来的数据
     static size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* userp) {
@@ -53,28 +53,32 @@ public:
 
             //构造极简的JSON Payload
             std::string json_payload = R"({"contents":[{"parts":[{"text": ")" + prompt + R"("}]}]})";
-                curl_easy_setopt(curl,CURLOPT_POSTFIELDS, json_payload.c_str());
+            curl_easy_setopt(curl,CURLOPT_POSTFIELDS, json_payload.c_str());
 
-                //设置接收回调
-                curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-                curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+            //设置接收回调
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
 
-                //为了速度，关掉SSL证书校验
-                curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+            //为了速度，关掉SSL证书校验
+            //curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 
-                //强制libcurl走代理（Astrill默认的本地代理端口通常是3278或3279）
-                //保险起见，指定一个常见的本地代理
-                curl_easy_setopt(curl, CURLOPT_PROXY, "http://127.0.0.1:3279");
+            //强制libcurl走代理（Astrill默认的本地代理端口通常是3278或3279）
+            //保险起见，指定一个常见的本地代理
+            //改细节
+            curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER,0L);
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+            //curl_easy_setopt(curl, CURLOPT_PROXY, "http://127.0.0.1:3278");
 
-                //执行请求
-                res = curl_easy_perform(curl);
-                if (res != CURLE_OK) {
-                    std::cerr << "cURL请求失败：" << curl_easy_strerror(res) << std::endl;
-                }
+            //执行请求
+            res = curl_easy_perform(curl);
+            if (res != CURLE_OK) {
+                std::cerr << "cURL请求失败：" << curl_easy_strerror(res) << std::endl;
+            }
 
-                //清理
-                curl_slist_free_all(headers);
-                curl_easy_cleanup(curl);
+            //清理
+            curl_slist_free_all(headers);
+            curl_easy_cleanup(curl);
         }
 
         //把API的回音打印出来，看看报什么错
