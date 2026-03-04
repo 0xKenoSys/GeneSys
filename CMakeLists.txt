@@ -15,7 +15,8 @@ foreach(current_file ${source_files})
     get_filename_component(target_name ${current_file} NAME_WE)
 
     # 1. 每次只用当前的 .cpp 文件生成一个对应的独立执行程序
-    add_executable(${target_name} ${current_file})
+    add_executable(${target_name} ${current_file}
+            KenoSys_Projects/GhostInTheShell_260304.cpp)
 
     # 2. 动态地把 cURL 链接给当前正在生成的这个目标
     target_link_libraries(${target_name} PRIVATE CURL::libcurl)
