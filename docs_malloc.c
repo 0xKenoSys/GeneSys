@@ -1,3 +1,13 @@
+typedef long Align; /* for alignment to long boundary*/
+union header {  /*bock header*/
+    struct {
+        union header *ptr;  /*next block if on free list*/
+        unsigned size;  /*size of this block*/
+    } s;
+    Align x;    /*force alignment of blocks*/
+};
+typedef union header Header;
+
 //￼总结：这个图说明了alloc的工作原理是指向空闲的储存区域（应该是缓冲区）,alloc和malloc的区别在于一个已经编译好了,是固定的,后者随用随取
 //总结：malloc与free反映了结构体、unions和typedef的用法,是用不依赖硬件的方式写出依赖硬件的代码（这是啥意思？）
 //硬件的依赖性:内存对齐（Memory Alignment）
