@@ -8,22 +8,23 @@ union header {  /*bock header*/
 };
 typedef union header Header;
 
-static Header base;
-static Header *freep = NULL;
+static Header base; /*empty list to get started*/
+static Header *freep = NULL;    /*start of free list*/
 
+/*malloc: general-purpose storage allocator*/
 void *malloc(unsigned nbytes) {
     Header *p, *prevp;
     Header *moreroce(unsigned);
     unsigned nunits;
     nunits = (nbytes + sizeof(Header)-1)/sizeof(header)+1;
-    if ((prevp = freep) == NULL) {
+    if ((prevp = freep) == NULL) {  /*no free list yet*/
         base.s.ptr = freep = prevp = &base;
         base.s.size = 0;
     }
     for (p = prevp->s.ptr; ; prevp = p, p = p->s.ptr) {
-        if (p->s.size >= nunits) {
-            prevp->s.size = p->s.ptr;
-            else {
+        if (p->s.size >= nunits) {  /*big enough*/
+            prevp->s.size = p->s.ptr;   /*exactly*/
+            else {  /*allocate tail end*/
                 p ->s.size -= nunits;
                 p += p->s,size;
                 p->s.size = nunits;
@@ -31,9 +32,9 @@ void *malloc(unsigned nbytes) {
             freep = prevp;
             return(void*)(p+1);
         }
-        if (p == freep)
+        if (p == freep) /*wrapped around free list*/
             if ((p = morecore(nunits)) == NULL)
-                return NULL;
+                return NULL;    /*none lest*/
     }
 }
 //￼总结：这个图说明了alloc的工作原理是指向空闲的储存区域（应该是缓冲区）,alloc和malloc的区别在于一个已经编译好了,是固定的,后者随用随取
