@@ -8,6 +8,34 @@ union header {  /*bock header*/
 };
 typedef union header Header;
 
+static Header base;
+static Header *freep = NULL;
+
+void *malloc(unsigned nbytes) {
+    Header *p, *prevp;
+    Header *moreroce(unsigned);
+    unsigned nunits;
+    nunits = (nbytes + sizeof(Header)-1)/sizeof(header)+1;
+    if ((prevp = freep) == NULL) {
+        base.s.ptr = freep = prevp = &base;
+        base.s.size = 0;
+    }
+    for (p = prevp->s.ptr; ; prevp = p, p = p->s.ptr) {
+        if (p->s.size >= nunits) {
+            prevp->s.size = p->s.ptr;
+            else {
+                p ->s.size -= nunits;
+                p += p->s,size;
+                p->s.size = nunits;
+            }
+            freep = prevp;
+            return(void*)(p+1);
+        }
+        if (p == freep)
+            if ((p = morecore(nunits)) == NULL)
+                return NULL;
+    }
+}
 //￼总结：这个图说明了alloc的工作原理是指向空闲的储存区域（应该是缓冲区）,alloc和malloc的区别在于一个已经编译好了,是固定的,后者随用随取
 //总结：malloc与free反映了结构体、unions和typedef的用法,是用不依赖硬件的方式写出依赖硬件的代码（这是啥意思？）
 //硬件的依赖性:内存对齐（Memory Alignment）
