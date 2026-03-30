@@ -14,7 +14,7 @@ static Header *freep = NULL;    /*start of free list*/
 /*malloc: general-purpose storage allocator*/
 void *malloc(unsigned nbytes) {
     Header *p, *prevp;
-    Header *moreroce(unsigned);
+    Header *morecore(unsigned);
     unsigned nunits;
     nunits = (nbytes + sizeof(Header)-1)/sizeof(header)+1;
     if ((prevp = freep) == NULL) {  /*no free list yet*/
@@ -34,9 +34,27 @@ void *malloc(unsigned nbytes) {
         }
         if (p == freep) /*wrapped around free list*/
             if ((p = morecore(nunits)) == NULL)
-                return NULL;    /*none lest*/
+                return NULL;    /*none left*/
     }
 }
+
+//
+#define NALLOC 1024 /*minimum #units to request*/
+/*morecore: ask system for more memory*/
+static Header *morecore(unsigned nu) {
+    char *cp, *sbrk(int);
+    Header *up;
+    if (nu < NALLOC)
+        nu = NALLOC;
+    cp = sbrk(nu * sizeof(Header));
+    if (cp == (char *) -1) /*no space at all*/
+        return NULL;
+    up = (Header *) cp;
+    up->s.size = nu;
+    free((void *)(up + 1));
+    return freep;
+}
+
 //￼总结：这个图说明了alloc的工作原理是指向空闲的储存区域（应该是缓冲区）,alloc和malloc的区别在于一个已经编译好了,是固定的,后者随用随取
 //总结：malloc与free反映了结构体、unions和typedef的用法,是用不依赖硬件的方式写出依赖硬件的代码（这是啥意思？）
 //硬件的依赖性:内存对齐（Memory Alignment）
