@@ -55,6 +55,30 @@ static Header *morecore(unsigned nu) {
     return freep;
 }
 
+//
+/*free: put block ap in free list*/
+void free(void *ap) {
+    Header *bp, *p;
+    bp = (Header *)ap -1;   /*point tp block header*/
+    for (p = freep; !(bp > p && bp < p->s.ptr); p = p->s.ptr)
+        if (p >= p->s.ptr && (bp > p || bp < p->s.ptr))
+            break;  /*freed block at start or end of arena*/
+
+    if (bp + bp->size == p->s.ptr) {    /*join to upper nbr*/
+        bp->s.size += p->s.ptr->s.size;
+        bp->s.ptr = p->s.ptr->s.ptr;
+    }else
+        bp->s.ptr = p->s.ptr;
+    if (p + p->s.size == bp) {
+        p->s.size += bp->s.size;
+        p->s.ptr = bp->s.ptr;
+    }else
+        p->s.ptr = bp;
+    freep = p;
+}
+
+}
+
 //￼总结：这个图说明了alloc的工作原理是指向空闲的储存区域（应该是缓冲区）,alloc和malloc的区别在于一个已经编译好了,是固定的,后者随用随取
 //总结：malloc与free反映了结构体、unions和typedef的用法,是用不依赖硬件的方式写出依赖硬件的代码（这是啥意思？）
 //硬件的依赖性:内存对齐（Memory Alignment）
