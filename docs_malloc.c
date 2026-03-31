@@ -1,0 +1,99 @@
+typedef long Align; /* for alignment to long boundary*/
+union header {  /*bock header*/
+    struct {
+        union header *ptr;  /*next block if on free list*/
+        unsigned size;  /*size of this block*/
+    } s;
+    Align x;    /*force alignment of blocks*/
+};
+typedef union header Header;
+
+static Header base; /*empty list to get started*/
+static Header *freep = NULL;    /*start of free list*/
+
+/*malloc: general-purpose storage allocator*/
+void *malloc(unsigned nbytes) {
+    Header *p, *prevp;
+    Header *morecore(unsigned);
+    unsigned nunits;
+    nunits = (nbytes + sizeof(Header)-1)/sizeof(header)+1;
+    if ((prevp = freep) == NULL) {  /*no free list yet*/
+        base.s.ptr = freep = prevp = &base;
+        base.s.size = 0;
+    }
+    for (p = prevp->s.ptr; ; prevp = p, p = p->s.ptr) {
+        if (p->s.size >= nunits) {  /*big enough*/
+            prevp->s.size = p->s.ptr;   /*exactly*/
+            else {  /*allocate tail end*/
+                p ->s.size -= nunits;
+                p += p->s,size;
+                p->s.size = nunits;
+            }
+            freep = prevp;
+            return(void*)(p+1);
+        }
+        if (p == freep) /*wrapped around free list*/
+            if ((p = morecore(nunits)) == NULL)
+                return NULL;    /*none left*/
+    }
+}
+
+//
+#define NALLOC 1024 /*minimum #units to request*/
+/*morecore: ask system for more memory*/
+static Header *morecore(unsigned nu) {
+    char *cp, *sbrk(int);
+    Header *up;
+    if (nu < NALLOC)
+        nu = NALLOC;
+    cp = sbrk(nu * sizeof(Header));
+    if (cp == (char *) -1) /*no space at all*/
+        return NULL;
+    up = (Header *) cp;
+    up->s.size = nu;
+    free((void *)(up + 1));
+    return freep;
+}
+
+//
+/*free: put block ap in free list*/
+void free(void *ap) {
+    Header *bp, *p;
+    bp = (Header *)ap -1;   /*point tp block header*/
+    for (p = freep; !(bp > p && bp < p->s.ptr); p = p->s.ptr)
+        if (p >= p->s.ptr && (bp > p || bp < p->s.ptr))
+            break;  /*freed block at start or end of arena*/
+
+    if (bp + bp->size == p->s.ptr) {    /*join to upper nbr*/
+        bp->s.size += p->s.ptr->s.size;
+        bp->s.ptr = p->s.ptr->s.ptr;
+    }else
+        bp->s.ptr = p->s.ptr;
+    if (p + p->s.size == bp) {
+        p->s.size += bp->s.size;
+        p->s.ptr = bp->s.ptr;
+    }else
+        p->s.ptr = bp;
+    freep = p;
+}
+
+}
+
+//￼总结：这个图说明了alloc的工作原理是指向空闲的储存区域（应该是缓冲区）,alloc和malloc的区别在于一个已经编译好了,是固定的,后者随用随取
+//总结：malloc与free反映了结构体、unions和typedef的用法,是用不依赖硬件的方式写出依赖硬件的代码（这是啥意思？）
+//硬件的依赖性:内存对齐（Memory Alignment）
+//软件的独立性:如果你要硬编码这些对齐规则，你的代码换一台电脑就无法编译运行了。在底层代码中，通常会定义一个联合体（union）。联合体的特性是：它的大小和对齐要求，是由它内部占用空间最大、对齐要求最严格的那个成员决定的。
+//开发者会把内存块的“控制信息（如大小、指针）”放在一个 struct 中，然后把这个 struct 和一个具有最严格对齐要求的底层数据类型（比如 long double 或是特定架构下最大的整数类型）一起放进一个 union 里。
+
+//总结：每个块还指向下一个块,尾指向头（为什么？）
+//循环链表（Circular Linked List）:对抗“内存碎片”。分配器就可以采用“下一次适应（Next-fit）”算法。
+
+//总结：chunk是什么？总之没找到大小合适的块,就会把另一个大块连接到链表。
+//一个标准的 chunk 包含两个主要部分：Header（头部/元数据）、Payload（有效载荷）
+//当你不断申请内存，循环链表里所有的空闲 chunk 都太小，或者链表干脆空了的时候，分配器就必须向上级——操作系统内核求援了。
+//这时候，分配器会发起系统调用（比如在 Unix/Linux 系统中是 brk、sbrk 或者是 mmap）。它不会只向操作系统要你目前急需的那一点点空间（那样系统调用的开销太昂贵了），它会狮子大开口，直接向内核申请一大片全新的、连续的物理内存页。
+//拿到这片广阔的新领地后，分配器会怎么做？
+//它会把这片巨大的新内存格式化为一个超大的新 chunk。接着，它就像切蛋糕一样，从这个大 chunk 上切下你刚才申请的合适大小，标记为“已占用”并交给你。
+//而剩下的那部分巨大的、未使用的空间，则被做成一个新的空闲 chunk，并被从容地插入到刚才我们提到的那个循环链表中，等待着满足你未来的分配需求。这就是所谓“把另一个大块连接到链表”的底层微观过程。
+// Created by Madeleine on 2026/3/26.
+//
