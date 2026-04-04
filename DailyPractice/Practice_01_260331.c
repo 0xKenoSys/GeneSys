@@ -7,14 +7,14 @@ int length;/*不初始化吗？*/
     scanf("%d",&length);
     //动态分配： 根据用户输入的长度，使用 malloc 在堆区动态分配一块足够大的字符（char）数组。
     void* malloc(unsigned nbytes) {
-Header *p;
+Header *p; /*指针怎么使用啊？*/
     }
     (char*)malloc(n * sizeof(char));
     //(陷阱提示：在C语言中，字符串必须以 \0 结尾，所以你在分配内存时，计算大小必须要考虑到这个隐藏的结束符。)
 nunits = (nbytes + sizeof(Header)-1)/sizeof(header)+1
     /*我的想法是加两个位置，分别给\和0*/
     //安全检查： 立即检查 malloc 的返回值。如果分配失败（返回 NULL），通过 printf 打印一条红色的错误提示信息（或者普通的错误信息），然后使用 return 1; 或 exit(1); 安全地结束程序。
-if return != 0{
+if return != 0{ /*如何检查返回值呢？*/
 printf("error");
     return 1;
 }
