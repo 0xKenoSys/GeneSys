@@ -9,7 +9,8 @@ int length, string;/*不初始化吗？*/
     //动态分配： 根据用户输入的长度，使用 malloc 在堆区动态分配一块足够大的字符（char）数组。
     void* malloc(unsigned nbytes) {
         /*先打样，再举一反三*/
-        /*把leetcode第一题做了再来*/
+        /*把leetcode第一题做了再来
+        * 赋值给地址*/
 Header *p; /*指针怎么使用啊？*/
     }
     (char*)malloc(n * sizeof(char));
