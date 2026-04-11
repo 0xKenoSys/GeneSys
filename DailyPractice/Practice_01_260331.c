@@ -23,6 +23,7 @@ int length, string;/*不初始化吗？*/
 //if return != 0{ /*如何检查返回值呢？*/
 //printf("error");
     //return 1;
+    //
 //}
     if (line_buffer == NULL) {
         printf("内存不足，分配失败\n");
