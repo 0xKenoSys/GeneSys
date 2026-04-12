@@ -41,8 +41,8 @@ int main() {
     }
     //数据写入： 如果分配成功，提示用户：“请输入字符串：”。将用户输入的字符串读入到你刚才动态分配的堆内存中。
     printf("请输入字符串：");
-    if (fgets(line_buffer, length + 1, stdin) != NULL) {    //fgets会读入\n，要把它踢掉  //如果读入信息，返回line_buffer，当然不等于NULL；若读到一场空，就不必剔除\n。原子感的执行和判断一体化：去做这件事，如果没有预期回馈，立即停止。
-        line_buffer[strcspn(line_buffer, "\n")] = '\0'; //strcspn: string span complement 把\n替换为\0
+    if (fgets(line_buffer, length + 1, stdin) != NULL) {    //fgets会读入\n，要把它踢掉 //地址，容量，坐标  //如果读入信息，返回line_buffer，当然不等于NULL；若读到一场空，就不必剔除\n。原子感的执行和判断一体化：去做这件事，如果没有预期回馈，立即停止。
+        line_buffer[strcspn(line_buffer, "\n")] = '\0'; //strcspn: string span complement 把\n替换为\0  //方括号（数组下标运算符）：物理寻址，本质是偏移量计算器，格式为：起点地址[偏移步数]。这一行是嵌套用法，方括号内调用了函数，返回了偏移步数。最后用\0覆盖定位到的内存。
     }
     //scanf("%s", line_buffer);   //line_buffer是一个地址，直接写入
 //if (p->s.size >= nunits) {  /*如何表示分配成功？我的理解是指针指到的一块size足够大。我不知道整个分配过程如何引入指针，如何用*/
@@ -51,11 +51,11 @@ int main() {
     //数据处理： 遍历这个动态分配的字符数组，把里面的所有小写字母全部转换成大写字母（证明你确实掌握了对这块堆内存的读写控制权）。
 /*遍历需要指针吧，还要循环*/
     int i = 0;
-    while (line_buffer[i] != '\0') {
+    while (line_buffer[i] != '\0') {    //单引号：翻译为ASCII码整数值
         if (line_buffer[i] >= 'a' && line_buffer[i] <= 'z') {
             line_buffer[i] = line_buffer[i] -32;
         }
-        i++;
+        i++;    //C语言里没有字符串（以\0结尾的字符数组），只有字符数组
     }
     //for (line_buffer[i]; i++; )
     //for (p = prevp->s.ptr; ; prevp = p, p = p->s.ptr) {
