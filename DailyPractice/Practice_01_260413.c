@@ -15,9 +15,9 @@
 //提问：咋映射过去呢？indices的中括号里的内容，和指针的偏移量如何建立映射？
 //Created by Madeleine on 2026/3/24.
 
-
+#include<stdio.h>
 #include <stdlib.h>
-int main() {
+
     int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
         for (int i = 0; i < numsSize; i++) {
             for (int j = i + 1; j < numsSize; j++) {
@@ -35,7 +35,22 @@ int main() {
         *returnSize = 0;
         return malloc(sizeof(int) * 0);
     }
-}
+int main() {
+        int nums[] = {2, 7, 11, 15};
+        int target = 9;
+        int returnSize;
+
+        int* result = twoSum(nums, 4, target, &returnSize);
+
+        if (returnSize == 2) {
+            printf("Indices: %d, %d\n", result[0], result[1]);
+        }else {
+            printf("No solution found.\n");
+        }
+
+        free(result);
+        return 0;
+    }
 
 
 
