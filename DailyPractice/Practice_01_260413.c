@@ -15,24 +15,26 @@
 //提问：咋映射过去呢？indices的中括号里的内容，和指针的偏移量如何建立映射？
 //Created by Madeleine on 2026/3/24.
 
-#include <stdio.h>
+
 #include <stdlib.h>
-int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
-    for (int i = 0; i < numsSize; i++) {
-        for (int j = i + 1; j < numsSize; j++) {
-            if (nums[j] == target - nums[i]) {
-                int* result = malloc(sizeof(int) * 2);
-                result[0] = i;
-                result[1] = j;
-                *returnSize = 2;
-                return result;
+int main() {
+    int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
+        for (int i = 0; i < numsSize; i++) {
+            for (int j = i + 1; j < numsSize; j++) {
+                if (nums[j] == target - nums[i]) {
+                    int* result = malloc(sizeof(int) * 2);
+                    result[0] = i;
+                    result[1] = j;
+                    *returnSize = 2;
+                    return result;
+                }
             }
         }
-    }
 
-    //Return an empty array if no solution is found
-    *returnSize = 0;
-    return malloc(sizeof(int) * 0);
+        //Return an empty array if no solution is found
+        *returnSize = 0;
+        return malloc(sizeof(int) * 0);
+    }
 }
 
 
@@ -48,4 +50,6 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
 
 
 
-
+//
+// Created by Madeleine on 2026/4/13.
+//
