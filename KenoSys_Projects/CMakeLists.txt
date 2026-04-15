@@ -24,7 +24,7 @@ foreach(current_file ${source_files})
             ../DailyPractice/Practice_02_260409.c
             ../DailyPractice/Practice_01_260324.c
             ../DailyPractice/Two_sum_01_Practice_01_260413.c
-            ../DailyPractice/Practice_01_260415.c
+            ../DailyPractice/Two_Sum_02_Practice_01_260415.c
             ../DailyPractice/Practice_02_260415.c)
 
     # 2. 动态地把 cURL 链接给当前正在生成的这个目标
