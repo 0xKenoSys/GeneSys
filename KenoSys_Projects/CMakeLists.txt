@@ -29,7 +29,8 @@ foreach(current_file ${source_files})
             ../DailyPractice/Palindrome_Number_01_Practice_03_260415.c
             ../DailyPractice/Practice_01_260416.c
             ../DailyPractice/Practice_01_260418.c
-            ../DailyPractice/Practice_01_260420.c)
+            ../DailyPractice/Practice_01_260420.c
+            ../DailyPractice/Practice_01_260421.c)
 
     # 2. 动态地把 cURL 链接给当前正在生成的这个目标
     target_link_libraries(${target_name} PRIVATE CURL::libcurl)
