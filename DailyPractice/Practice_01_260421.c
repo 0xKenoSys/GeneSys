@@ -3,5 +3,6 @@
 //赶紧看完本章到216页。中午之前。
 //学使用obsidian
 //在obsidian上面建bomb lab
+//在obsidian上面建道学知识库
 // Created by Madeleine on 2026/4/21.
 //
