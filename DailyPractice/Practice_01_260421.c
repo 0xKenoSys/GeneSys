@@ -4,5 +4,6 @@
 //学使用obsidian
 //在obsidian上面建bomb lab
 //在obsidian上面建道学知识库
+//把Pery的教训一字不落地总结下来，不要偏离。
 // Created by Madeleine on 2026/4/21.
 //
