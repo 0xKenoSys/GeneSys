@@ -12,5 +12,6 @@
 //EOF的值是-1，不属于数据层，属于控制层，叫带外信令
 //什么是内存句柄？
 //如何用c语言实现三进制？
+//git clone了verilog 编译器
 // Created by Madeleine on 2026/4/21.
 //
