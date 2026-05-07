@@ -13,5 +13,6 @@
 //什么是内存句柄？
 //如何用c语言实现三进制？
 //git clone了verilog 编译器
+//在看CSAPP，但是光看是完全没用的，证伪了这个方式不可取，得敲打键盘
 // Created by Madeleine on 2026/4/21.
 //
