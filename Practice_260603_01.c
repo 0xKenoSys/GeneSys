@@ -23,6 +23,6 @@ void show_pointer(void *x) {
 
 
 
-//
+//CSAPP page 31
 // Created by Madeleine on 2026/6/3.
 //
