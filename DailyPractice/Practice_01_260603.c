@@ -10,7 +10,7 @@ void show_bytes(byte_pointer start, size_t len) {
 }
 
 void show_int(int x) {
-    show_bytes((byte_pointer) &x, sizeof(int));
+    show_bytes((byte_pointer) &x, sizeof(int)); //(byte_pointer)是强制类型转换，从跃进4字节变成1字节
 }
 
 void show_float(float x) {
