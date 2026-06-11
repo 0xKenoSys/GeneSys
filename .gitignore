@@ -1,0 +1,16 @@
+# 操作系统特定文件
+.DS_Store
+Thumbs.db
+
+# 编程语言编译缓存
+__pycache__/
+*.pyc
+*.exe
+*.out
+
+# 编辑器与IDE配置
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+
