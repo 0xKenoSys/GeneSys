@@ -11,14 +11,6 @@ int* getConcatenation(int* nums, int numsSize, int* returnSize) {
 
     int* ans = (int*)malloc(2 * numsSize * sizeof(int));
 
-    numsSize = n;
-    size_t i;
-    for (i = 0; i < n; i++ )
-    ans[i] = nums[i];
-
-    for (i = n; i < 2 * n ; i++)
-    anu[i+n] = nums[i];
-
     //遍历原数组，利用一次循环填满新数组的两个位置
     for(int i = 0; i < numsSize; i++){
     ans[i] = nums[i];
