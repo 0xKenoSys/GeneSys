@@ -1,3 +1,58 @@
+/**
+* Note: The returned array must be malloced, assume caller calls free().
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+//qsort所需的比较函数
+int compare(const void* a, const void* b){
+    return (*(int*)a - *(int*)b);
+}
+
+int* findErrorNums(int* nums, int numsSize, int* returnSize) {
+    //1.使用标准库qsort对数组进行升序排列，时间复杂度O(n long n)
+    qsort(nums, numsSize, sizeof(int), compare);
+
+    //2.依据题目要求，在堆区(Heap)动态分配返回数组的内存
+    int* result = (int*)malloc(2 * sizeof(int));
+    *returnSize = 2;    //必须显式告知调用方返回数组的长度
+
+    int dup = -1;
+    int missing = -1;
+
+    //3.检查首位的边界条件：如果排序后的第一个数不是1，说明1丢失了
+    if (nums[0] != 1){
+        missing = 1;
+    }
+
+    //4.检查末尾的边界条件：如果最后一个数不是numsSize，说明numsSize丢失了
+    if (nums[numsSize - 1] != numsSize) {
+        missing = numsSize;
+    }
+
+    //5.线性遍历数组，寻找相邻元素之间的异常状态
+    for (int i = 1; i < numsSize; i++) {
+        if (nums[i] == nums[i - 1]) {
+            //相邻元素相等，说明找到了重复项
+            dup = nums[i];
+        } else if (nums[i] - nums[i - 1] > 1){
+            //相邻元素差值大于1，说明中间有断层，断层处即为丢失项
+            missing = nums[i - 1] + 1;
+        }
+    }
+
+    //写入结果并返回
+    result[0] = dup;
+    result[1] = missing;
+    return result;
+}
+
+
+
+
+
+
 /*
  *KenoSys。针对你在这道 LeetCode 题目草稿区写下的思路，我们来进行一次彻底的拆解。
 
