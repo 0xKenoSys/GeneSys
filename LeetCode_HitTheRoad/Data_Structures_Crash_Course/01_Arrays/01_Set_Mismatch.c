@@ -7,7 +7,7 @@
 
 //qsort所需的比较函数
 int compare(const void* a, const void* b){
-    return (*(int*)a - *(int*)b);
+    return (*(int*)a - *(int*)b);   //*(int*)a是什么？int*是什么？类型为int的指针？(int*)是什么？那a怎么放在这里？
 }
 
 int* findErrorNums(int* nums, int numsSize, int* returnSize) {
@@ -18,6 +18,8 @@ int* findErrorNums(int* nums, int numsSize, int* returnSize) {
     int* result = (int*)malloc(2 * sizeof(int));
     *returnSize = 2;    //必须显式告知调用方返回数组的长度
 
+    //从这里开始分界，后面这一大段和前面这些指针好像没用关系，比如，星号从此开始消失了
+
     int dup = -1;
     int missing = -1;
 
@@ -26,7 +28,7 @@ int* findErrorNums(int* nums, int numsSize, int* returnSize) {
         missing = 1;
     }
 
-    //4.检查末尾的边界条件：如果最后一个数不是numsSize，说明numsSize丢失了
+    //4.检查末尾的边界条件：如果最后一个数不是numsSize，说明numsSize丢失了  //为什么要这样检查边界条件？直接遍历不就行了吗？
     if (nums[numsSize - 1] != numsSize) {
         missing = numsSize;
     }
