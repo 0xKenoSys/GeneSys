@@ -23,7 +23,7 @@ int* smallerNumbersThanCurrent(int* nums, int numsSize, int* returnSize) {
     }
 
     for (int i = 1; i <= 100; i++) {
-        count[i] += count[i - 1];
+        count[i] += count[i - 1];   //最后count[i]表示比i+1小，即小于等于i的数有几个
     }
 
     for (int i = 0; i < numsSize; i++) {
