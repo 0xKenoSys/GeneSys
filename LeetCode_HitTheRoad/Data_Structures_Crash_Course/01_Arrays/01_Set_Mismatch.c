@@ -26,7 +26,7 @@ int* findErrorNums(int* nums, int numsSize, int* returnSize) {
     int missing = -1;
 
     //3.检查首位的边界条件：如果排序后的第一个数不是1，说明1丢失了
-    if (nums[0] != 1){
+    if (nums[0] != 1){  //星号没有消失。语法糖：nums[i] = *(nums + i)
         missing = 1;
     }
 
