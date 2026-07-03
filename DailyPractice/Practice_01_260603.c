@@ -15,6 +15,7 @@ void show_int(int x) {
                                                     //这张标签上写着：“这是一个起始地址为 1000 的门牌号，并且请注意，这个门牌号背后住着的客人是一个 int，他一口气占了 4 个房间。”
                                                     //这个带有类型标签的内存地址，才是我们真正意义上所说的指针。
                                                     //所以，&x 的结果，不仅产生了一个数值（1000），还产生了一个数据类型（int *，即指向整型的指针）。取地址的操作，就是把一个物理实体的坐标提取出来，并附加上它跨度的元数据。
+                                                    //&是取地址符
 }
 
 void show_float(float x) {
@@ -25,6 +26,41 @@ void show_pointer(void *x) {
     show_bytes((byte_pointer) &x, sizeof(void *));
 }
 
+
+void test_show_bytes(int val) {
+    //1.准备三种不同类型的测试数据：
+    int ival = val;                 //整
+    float fval = (float) ival;      //将整型强制转换为单精度浮点型
+    int *pval = &ival;              //指针型：存储ival的内存地址
+
+    printf("--- 开始探索内存底层的字节表示 ---\n\n");
+
+    //2.测试show_int
+    printf("1.整数%d在内存中的字节序列：\n", ival);
+    show_int(ival);
+    printf("\n");
+
+    //3.测试show_float
+    printf("2.浮点数%f在内存中的字节序列：\n", fval);
+    show_float(fval);
+    printf("\n");
+
+    //4.测试show_pointer
+    printf("3.存放该整数的指针（内存地址）的字节序列：\n");
+    show_pointer(pval);
+    printf("\n");
+}
+
+int main() {
+    //设定一个经典的测试数字，可以随意修改这个数字看看输出的变化
+    int test_val = 12345;
+
+    //调用测试集成函数
+    test_show_bytes(test_val);
+
+    //返回0代表程序正常、成功地结束
+    return 0;
+}
 
 
 //CSAPP page 31
