@@ -29,7 +29,7 @@ void show_pointer(void *x) {
 
 void test_show_bytes(int val) {
     //1.准备三种不同类型的测试数据：
-    int ival = val;                 //整
+    int ival = val;                 //整型
     float fval = (float) ival;      //将整型强制转换为单精度浮点型
     int *pval = &ival;              //指针型：存储ival的内存地址
 
