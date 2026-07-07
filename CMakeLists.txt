@@ -49,7 +49,7 @@ foreach(SOURCE_FILE ${ALL_SOURCE_FILES})
     message(STATUS "Auto-generating target: ${TARGET_NAME} from ${SOURCE_FILE}")
 
     # 核心指令：以提取出的文件名作为目标名，以当前遍历到的文件作为源码，生成一个可执行程序
-    add_executable(${TARGET_NAME} ${SOURCE_FILE}
-            LeetCode_HitTheRoad/Data_Structures_Crash_Course/01_Arrays/Find_All_Numbers_Disappeared/Find_All_Numbers_Disappeared_01.c)
+    add_executable(${TARGET_NAME} "${SOURCE_FILE}"
+            DailyPractice/CSAPP_Page683.c)
 
 endforeach()
