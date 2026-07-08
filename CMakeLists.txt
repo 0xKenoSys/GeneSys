@@ -50,6 +50,9 @@ foreach(SOURCE_FILE ${ALL_SOURCE_FILES})
 
     # 核心指令：以提取出的文件名作为目标名，以当前遍历到的文件作为源码，生成一个可执行程序
     add_executable(${TARGET_NAME} "${SOURCE_FILE}"
-            DailyPractice/CSAPP_Page683.c)
+            DailyPractice/CSAPP_Page683.c
+            DailyPractice/Practice_01_260708.c
+            DailyPractice/Practice_02_260708.c
+            DailyPractice/Practice_03_260708.c)
 
 endforeach()
