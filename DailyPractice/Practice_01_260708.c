@@ -2,7 +2,8 @@
 
 int main() {
      //声明一个字符指针，指向一个字符串常量
-     char *str = "Happy Hacking";
+     //char *str = "Happy Hacking";
+     char str[] = "Happy Hacking";
 
      printf("准备执行越界写操作…");
 
