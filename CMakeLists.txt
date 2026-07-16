@@ -53,6 +53,8 @@ foreach(SOURCE_FILE ${ALL_SOURCE_FILES})
             DailyPractice/CSAPP_Page683.c
             DailyPractice/Practice_01_260708.c
             DailyPractice/Practice_02_260708.c
-            DailyPractice/Practice_03_260708.c)
+            DailyPractice/Practice_03_260708.c
+            KenoSys_Projects/Kenosh.c
+            DailyPractice/Practice_01_260716.c)
 
 endforeach()
