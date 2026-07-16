@@ -35,14 +35,45 @@ int main() {
 
         //拦截cd(Change Directory)
         if (strcmp(args[0], "cd") == 0) {
-            if (args[1] == NULL) {
-                fprintf(stderr, "Kenosh: 期望给 cd提供一个参数\n");
-            }else {
-                //亲自下场，调用内核API改变当前进程的目录
-                if (chdir(args[1]) != 0) {
-                    perror("Kenosh: cd 失败");
+            char *target_dir = args[1];
+            //准备一个缓冲区，用来存放拼接后的完整路径
+            char expanded_path[1024];
+
+            //如果没有参数，或者参数是"~"，默认跳转到家目录
+            if (target_dir == NULL || strcmp(target_dir, "~") == 0) {
+                target_dir = getenv("HOME"); //获取系统的HOME环境变量
+                if (target_dir == NULL) {
+                    fprintf(stderr, "Kenosh: 无法获取 HOME 环境变量\n");
+                    continue;
                 }
             }
+
+            //如果是以"~/"开头(比如"~/Desktop")
+            else if (strncmp(target_dir, "~/", 2) == 0) {
+                char *home = getenv("HOME");
+                if (home == NULL) {
+                    fprintf(stderr, "Kenosh: 无法获取 HOME 环境变量\n");
+                    continue;
+                }
+
+                //核心操作：安全拼接字符串
+                //target_dir + 1是精髓
+                //如果target_dir是"~/Desktop", target_dir + 1 就变成了"/Desktop"
+                //我们把 HOME 和"/Desktop"拼起来，塞进expanded_path
+                snprintf(expanded_path, sizeof(expanded_path), "%s%s", home, target_dir + 1);
+
+                //把要跳转的目标指向我们刚刚拼接好的新字符串
+                target_dir = expanded_path;
+            }
+
+
+                //亲自下场，调用内核API改变当前进程的目录
+                //printf("DEBUG: 实际交给 chdir 的路径是 -> [%s]\n", target_dir);
+
+                if (chdir(target_dir) != 0){
+                    perror("Kenosh: cd 失败");
+                }
+
             continue;   //核心：拦截完毕，直接进入下一次循环，绝对不能fork
         }
 
