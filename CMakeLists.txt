@@ -55,6 +55,7 @@ foreach(SOURCE_FILE ${ALL_SOURCE_FILES})
             DailyPractice/Practice_02_260708.c
             DailyPractice/Practice_03_260708.c
             KenoSys_Projects/Kenosh.c
-            DailyPractice/Practice_01_260716.c)
+            DailyPractice/Practice_01_260716.c
+            DailyPractice/Practice_01_260717.c)
 
 endforeach()
