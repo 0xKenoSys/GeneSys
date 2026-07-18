@@ -96,13 +96,12 @@ int main() {
 
         if (pid == 0) {
             //子进程：执行命令
-            if (execvp(args[0], args) == -1) {
-                perror("命令执行失败");
-            }
-            exit(1);
+            execvp(args[0], args);
+            perror(args[0]);
+            exit(127);
         }else if (pid > 0) {
             //父进程（Shell本体）：等待子进程结束
-            wait(NULL);
+            wait(NULL);   //wait(NULL)就是waitpid(-1, NULL, 0)的简写。waitpid要读pid和进程表的退出状态然后内核删掉，否则已死但未销户就是僵尸进程
         }else {
             perror("fork失败");
         }
