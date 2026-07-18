@@ -30,6 +30,13 @@ file(GLOB_RECURSE ALL_CXX_FILES "*.cpp")
 # 合并两个列表，存入 ALL_SOURCE_FILES
 set(ALL_SOURCE_FILES ${ALL_C_FILES} ${ALL_CXX_FILES})
 
+set(TLPI_DIR $ENV{HOME}/Workspace/inbox/tlpi-dist)
+
+add_library(tlpi STATIC
+        ${TLPI_DIR}/lib/error_functions.c
+        ${TLPI_DIR}/lib/get_num.c)
+target_include_directories(tlpi PUBLIC ${TLPI_DIR}/lib)
+
 # 步骤 B：遍历文件并生成 Target
 # 开启一个 foreach 循环，遍历 ALL_SOURCE_FILES 中的每一个文件路径
 foreach(SOURCE_FILE ${ALL_SOURCE_FILES})
@@ -48,14 +55,10 @@ foreach(SOURCE_FILE ${ALL_SOURCE_FILES})
     # 打印日志（可选，为了让你在控制台看到 CMake 正在做什么）
     message(STATUS "Auto-generating target: ${TARGET_NAME} from ${SOURCE_FILE}")
 
+
+
     # 核心指令：以提取出的文件名作为目标名，以当前遍历到的文件作为源码，生成一个可执行程序
-    add_executable(${TARGET_NAME} "${SOURCE_FILE}"
-            DailyPractice/CSAPP_Page683.c
-            DailyPractice/Practice_01_260708.c
-            DailyPractice/Practice_02_260708.c
-            DailyPractice/Practice_03_260708.c
-            KenoSys_Projects/Kenosh.c
-            DailyPractice/Practice_01_260716.c
-            DailyPractice/Practice_01_260717.c)
+    add_executable(${TARGET_NAME} "${SOURCE_FILE}")
+            target_link_libraries(${TARGET_NAME} PRIVATE tlpi)
 
 endforeach()
