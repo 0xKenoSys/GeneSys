@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     while (environ != NULL && *environ != NULL) {
         char name[128];
         char *eq = strchr(*environ, '=');
-        if (eq == NULL) continue;
+        if (eq == NULL) break;
         snprintf(name, sizeof(name), "%.*s", (int)(eq - *environ), *environ);
         unsetenv(name);
     }
