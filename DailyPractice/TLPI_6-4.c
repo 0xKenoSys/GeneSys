@@ -15,9 +15,11 @@ int main(int argc, char *argv[]) {
     while (environ != NULL && *environ != NULL) {
         char name[128];
         char *eq = strchr(*environ, '=');
+        if (eq == NULL) continue;
         snprintf(name, sizeof(name), "%.*s", (int)(eq - *environ), *environ);
         unsetenv(name);
     }
+
 
     for ( j = 1; j < argc; j++)
         if (putenv(argv[j]) != 0)
